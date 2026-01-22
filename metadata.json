@@ -1,0 +1,7 @@
+{
+  "name": "CalmTooth Dental Clinic - Abuja",
+  "description": "Experience painless, professional dental care at CalmTooth. Expert general, cosmetic, and surgical dental services at AMAC Plaza, Wuse, Abuja.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
