@@ -10,6 +10,19 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
     service: data.services[0] || ''
   });
   const [isSubmitted, setIsSubmitted] = React.useState(false);
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,17 +154,36 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                     </div>
                     <div className="md:col-span-2 space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Treatment Interested In</label>
-                      <div className="relative">
-                        <select 
-                          value={formData.service}
-                          onChange={(e) => setFormData({...formData, service: e.target.value})}
-                          className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition appearance-none cursor-pointer font-medium text-slate-900"
+                      <div className="relative" ref={dropdownRef}>
+                        <button
+                          type="button"
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                          className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition cursor-pointer font-medium text-slate-900 text-left flex items-center justify-between"
                         >
-                          {data.services.map((s, i) => <option key={i} value={s}>{s}</option>)}
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#00898F]">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                        </div>
+                          <span>{formData.service}</span>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-[#00898F] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                        {dropdownOpen && (
+                          <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden max-h-64 overflow-y-auto">
+                            {data.services.map((s, i) => (
+                              <button
+                                key={i}
+                                type="button"
+                                onClick={() => {
+                                  setFormData({...formData, service: s});
+                                  setDropdownOpen(false);
+                                }}
+                                className={`w-full px-4 py-3 text-left font-medium transition-colors ${
+                                  formData.service === s 
+                                    ? 'bg-slate-100 text-slate-900' 
+                                    : 'text-slate-700 hover:bg-slate-50'
+                                }`}
+                              >
+                                {s}
+                              </button>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="md:col-span-2">
