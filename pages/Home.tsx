@@ -20,6 +20,9 @@ export const Home: React.FC<{ data: GMBData }> = ({ data }) => {
   const [currentReviewIndex, setCurrentReviewIndex] = useState(0);
   const reviews = data.reviews?.slice(0, 6) || [];
 
+  const [containerHeight, setContainerHeight] = useState<number>(350);
+  const reviewRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   const nextReview = () => {
     setCurrentReviewIndex((prev) => (prev + 1) % reviews.length);
   };
@@ -34,6 +37,26 @@ export const Home: React.FC<{ data: GMBData }> = ({ data }) => {
     const timer = setInterval(nextReview, 5000);
     return () => clearInterval(timer);
   }, []);
+
+  // Update container height based on current review
+  useEffect(() => {
+    if (reviewRefs.current[currentReviewIndex]) {
+      const height = reviewRefs.current[currentReviewIndex]?.offsetHeight;
+      if (height) setContainerHeight(height);
+    }
+  }, [currentReviewIndex, reviews]);
+
+  // Update height on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (reviewRefs.current[currentReviewIndex]) {
+        const height = reviewRefs.current[currentReviewIndex]?.offsetHeight;
+        if (height) setContainerHeight(height);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [currentReviewIndex]);
 
   const workExamples = [
     {
@@ -219,10 +242,14 @@ export const Home: React.FC<{ data: GMBData }> = ({ data }) => {
             </div>
           </div>
 
-          <div className="relative w-full h-[350px]">
+          <div 
+            className="relative w-full transition-[height] duration-500 ease-in-out"
+            style={{ height: `${containerHeight}px` }}
+          >
             {reviews?.map((review, idx) => (
               <div
                 key={review.id}
+                ref={(el) => (reviewRefs.current[idx] = el)}
                 className={`absolute top-0 left-0 w-full transition-all duration-700 ease-in-out transform ${
                   idx === currentReviewIndex
                     ? "translate-x-0 opacity-100 scale-100"
@@ -232,7 +259,7 @@ export const Home: React.FC<{ data: GMBData }> = ({ data }) => {
                   visibility: idx === currentReviewIndex ? "visible" : "hidden",
                 }}
               >
-                <div className="bg-slate-50 p-10 rounded-[2.5rem] border border-slate-100 max-w-4xl mx-auto shadow-sm">
+                <div className="bg-slate-50 p-6 md:p-10 rounded-[2.5rem] border border-slate-100 max-w-4xl mx-auto shadow-sm">
                   <div className="flex text-yellow-400 gap-1 mb-8">
                     {[...Array(Math.round(review.rating))].map((_, i) => (
                       <Star key={i} size={20} fill="currentColor" />
