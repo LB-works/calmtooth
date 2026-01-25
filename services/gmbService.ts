@@ -6,7 +6,7 @@ export const fetchGMBData = async (): Promise<GMBData> => {
     name: "CalmTooth",
     address:
       "Plot 54, Poly plaza Besides AP plaza, Suite A9, 1073 Adetokunbo Ademola Cres, Wuse 2, 900288, Federal Capital Territory",
-    phone: "+234 818 100 0111",
+    phone: "+234 807 444 1148",
     description:
       "CalmTooth is Abuja's premier dental clinic designed for patient comfort. We specialize in providing a relaxing, anxiety-free environment while delivering state-of-the-art dental treatments, from routine scaling and polishing to complex oral surgeries and orthodontics.",
     averageRating: 5.0,

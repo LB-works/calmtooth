@@ -26,7 +26,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Format message for WhatsApp
     const message = encodeURIComponent(
       `*New Appointment Request* \n\n` +
@@ -37,7 +37,9 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
     );
 
     // Redirect to WhatsApp (using provided real clinic number)
-    window.open(`https://wa.me/2348074441148?text=${message}`, '_blank');
+    // We strip non-numeric characters for the URL
+    const cleanPhone = data.phone.replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${cleanPhone}?text=${message}`, '_blank');
     setIsSubmitted(true);
   };
 
@@ -46,7 +48,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
       {/* Header */}
       <section className="bg-teal-950 text-white py-24 relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src="/images/contact-hero.png" className="w-full h-full object-cover opacity-15" alt="Office Background"/>
+          <img src="/images/contact-hero.png" className="w-full h-full object-cover opacity-15" alt="Office Background" />
         </div>
         <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">Contact CalmTooth</h1>
@@ -62,7 +64,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-teal-50 text-[#00898F] rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <MapPin size={24}/>
+                    <MapPin size={24} />
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900">Abuja Office</h4>
@@ -71,19 +73,19 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-teal-50 text-[#00898F] rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <Phone size={24}/>
+                    <Phone size={24} />
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900">Phone</h4>
                     <p className="text-slate-600 text-sm">{data.phone}</p>
                     <a href={`https://wa.me/${data.phone.replace(/[^0-9]/g, '')}`} className="text-[#00898F] text-xs font-bold flex items-center gap-1 mt-1">
-                      <MessageCircle size={14}/> Message on WhatsApp
+                      <MessageCircle size={14} /> Message on WhatsApp
                     </a>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-teal-50 text-[#00898F] rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <Mail size={24}/>
+                    <Mail size={24} />
                   </div>
                   <div>
                     <h4 className="font-bold text-slate-900">Email</h4>
@@ -117,7 +119,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                   <p className="text-slate-600 mb-8 max-w-md mx-auto">
                     Thanks for starting your request. You should now be redirected to WhatsApp to complete your message.
                   </p>
-                  <button 
+                  <button
                     onClick={() => setIsSubmitted(false)}
                     className="text-[#00898F] font-bold hover:underline"
                   >
@@ -128,26 +130,26 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                 <>
                   <h2 className="text-3xl font-bold text-slate-900 mb-2">Request an Appointment</h2>
                   <p className="text-slate-500 mb-10">Select a service and tell us when you'd like to visit.</p>
-                  
+
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-6" onSubmit={handleSubmit}>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
-                      <input 
-                        type="text" 
+                      <input
+                        type="text"
                         value={formData.name}
-                        onChange={(e) => setFormData({...formData, name: e.target.value})}
-                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition font-medium text-slate-900 placeholder:text-slate-400" 
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition font-medium text-slate-900 placeholder:text-slate-400"
                         placeholder="Your Name"
                         required
                       />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase tracking-widest">Phone</label>
-                      <input 
-                        type="tel" 
+                      <input
+                        type="tel"
                         value={formData.phone}
-                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition font-medium text-slate-900 placeholder:text-slate-400" 
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition font-medium text-slate-900 placeholder:text-slate-400"
                         placeholder="+234..."
                         required
                       />
@@ -161,7 +163,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                           className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-[#00898F] outline-none transition cursor-pointer font-medium text-slate-900 text-left flex items-center justify-between"
                         >
                           <span>{formData.service}</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-[#00898F] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6"/></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`text-[#00898F] transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}><path d="m6 9 6 6 6-6" /></svg>
                         </button>
                         {dropdownOpen && (
                           <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden max-h-64 overflow-y-auto">
@@ -170,14 +172,13 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                                 key={i}
                                 type="button"
                                 onClick={() => {
-                                  setFormData({...formData, service: s});
+                                  setFormData({ ...formData, service: s });
                                   setDropdownOpen(false);
                                 }}
-                                className={`w-full px-4 py-3 text-left font-medium transition-colors ${
-                                  formData.service === s 
-                                    ? 'bg-slate-100 text-slate-900' 
+                                className={`w-full px-4 py-3 text-left font-medium transition-colors ${formData.service === s
+                                    ? 'bg-slate-100 text-slate-900'
                                     : 'text-slate-700 hover:bg-slate-50'
-                                }`}
+                                  }`}
                               >
                                 {s}
                               </button>
@@ -188,7 +189,7 @@ export const ContactPage: React.FC<{ data: GMBData }> = ({ data }) => {
                     </div>
                     <div className="md:col-span-2">
                       <button className="w-full bg-[#00898F] hover:bg-[#00767a] text-white px-12 py-5 rounded-2xl font-bold text-lg flex items-center justify-center gap-3 shadow-xl transition-all hover:scale-105 active:scale-95">
-                        Request Appointment <Send size={20}/>
+                        Request Appointment <Send size={20} />
                       </button>
                     </div>
                   </form>
